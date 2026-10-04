@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA AI — Assistant intelligent</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #94a3b8;
+        }
+
+        .chat-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 18px;
+            padding: 20px;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .bot {
+            background: #334155;
+            margin-right: auto;
+        }
+
+        .user {
+            background: #0284c7;
+            margin-left: auto;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 15px 22px;
+            border: none;
+            border-radius: 10px;
+            background: #0284c7;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0369a1;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .quick-actions button {
+            background: #1e293b;
+            border: 1px solid #475569;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .welcome h1 {
+                font-size: 27px;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">NOVA <span>AI</span></div>
+    <div class="subtitle">Ton assistant intelligent pour développer ton activité</div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h1>Bienvenue sur NOVA AI 🤖</h1>
+        <p>
+            Ton assistant pour créer du contenu, vendre et développer Nova Digital.
+        </p>
+    </section>
+
+    <section class="chat-box">
+
+        <div id="messages">
+
+            <div class="message bot">
+                👋 Bonjour ! Je suis <strong>NOVA AI</strong>.<br><br>
+                Je peux t'aider à créer des publicités, des scripts vidéo,
+                des publications et des stratégies de vente.
+            </div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Écris ta demande..."
+                onkeydown="handleKey(event)"
+            >
+
+            <button onclick="sendMessage()">
+                Envoyer
+            </button>
+
+        </div>
+
+    </section>
+
+    <div class="quick-actions">
+
+        <button onclick="quickMessage('Crée une publicité pour mon produit')">
+            📢 Publicité
+        </button>
+
+        <button onclick="quickMessage('Crée un script vidéo TikTok')">
+            🎬 Script vidéo
+        </button>
+
+        <button onclick="quickMessage('Donne-moi une stratégie pour trouver des clients')">
+            🚀 Stratégie
+        </button>
+
+        <button onclick="quickMessage('Crée une publication WhatsApp')">
+            💬 WhatsApp
+        </button>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Nova Digital — NOVA AI
+</footer>
+
+<script>
+
+function addMessage(text, type) {
+
+    const messages = document.getElementById("messages");
+
+    const message = document.createElement("div");
+
+    message.className = "message " + type;
+
+    message.innerHTML = text;
+
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+function sendMessage() {
+
+    const input = document.getElementById("userInput");
+
+    const text = input.value.trim();
+
+    if (text === "") return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    setTimeout(() => {
+
+        let response = generateResponse(text);
+
+        addMessage(response, "bot");
+
+    }, 600);
+}
+
+
+function quickMessage(text) {
+
+    document.getElementById("userInput").value = text;
+
+    sendMessage();
+
+}
+
+
+function handleKey(event) {
+
+    if (event.key === "Enter") {
+
+        sendMessage();
+
+    }
+
+}
+
+
+function generateResponse(text) {
+
+    const message = text.toLowerCase();
+
+    if (message.includes("publicité")) {
+
+        return `
+        📢 <strong>Idée de publicité :</strong><br><br>
+
+        Tu as un produit mais tu n'arrives pas à trouver tes premiers clients ?
+        Découvre une méthode simple pour attirer tes premiers acheteurs grâce à WhatsApp.<br><br>
+
+        👉 Écris <strong>JE VEUX</strong> pour recevoir les informations.
+        `;
+
+    }
+
+    if (message.includes("script") || message.includes("vidéo")) {
+
+        return `
+        🎬 <strong>Script vidéo :</strong><br><br>
+
+        Scène 1 : « Tu as un produit mais presque aucun client ? »<br><br>
+
+        Scène 2 : « Le problème n'est peut-être pas ton produit,
+        mais ta méthode pour trouver tes clients. »<br><br>
+
+        Scène 3 : « Découvre une méthode simple pour obtenir tes premiers clients
+        avec WhatsApp. »
+        `;
+
+    }
+
+    if (message.includes("client") || message.includes("stratégie")) {
+
+        return `
+        🚀 <strong>Stratégie simple :</strong><br><br>
+
+        1️⃣ Identifie ton client idéal.<br>
+        2️⃣ Trouve-le dans les groupes et communautés adaptés.<br>
+        3️⃣ Apporte de la valeur avant de vendre.<br>
+        4️⃣ Présente ton offre clairement.<br>
+        5️⃣ Relance les personnes intéressées.
+        `;
+
+    }
+
+    if (message.includes("whatsapp")) {
+
+        return `
+        💬 <strong>Message WhatsApp :</strong><br><br>
+
+        Bonjour 👋<br><br>
+
+        Tu cherches une méthode simple pour développer ton activité
+        et trouver tes premiers clients ?<br><br>
+
+        J'ai une ressource qui peut t'aider à passer à l'action étape par étape.<br><br>
+
+        👉 Réponds <strong>JE VEUX</strong> pour recevoir les détails.
+        `;
+
+    }
+
+    return `
+        🤖 Je comprends ta demande.<br><br>
+
+        Pour le moment, je suis encore dans ma première version.
+        Mon véritable cerveau IA sera connecté à l'étape suivante. 🚀
+    `;
+
+}
+
+</script>
+
+</body>
+</html>
